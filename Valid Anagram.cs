@@ -25,17 +25,22 @@ namespace neetcode.io
 
         public bool IsAnagram(string s, string t)
         {
+            if (s.Length != t.Length) return false;
+            if (s == t) return true;
 
-            if (s.Length != t.Length) { return false; }
-            if (s == t) { return true; }
+            Dictionary<char, int> sCounts = new Dictionary<char, int>();
+            Dictionary<char, int> tCounts = new Dictionary<char, int>();
 
-            int stringLength = s.Length;
-            for (int i = 0; i < stringLength; i++)
+            for (int i = 0; i < s.Length; i++)
             {
-                char c = s[i];
-                int indexOfChar = t.IndexOf(c);
-                try { t = t.Remove(indexOfChar, 1); }
-                catch { return false; }
+                sCounts[s[i]] = 1 + (sCounts.ContainsKey(s[i]) ? sCounts[s[i]] : 0);
+                tCounts[t[i]] = 1 + (tCounts.ContainsKey(t[i]) ? tCounts[t[i]] : 0);
+            }
+
+            foreach (char c in sCounts.Keys)
+            {
+                int tCount = tCounts.ContainsKey(c) ? tCounts[c] : 0;
+                if (sCounts[c] != tCount) return false;
             }
             return true;
         }
